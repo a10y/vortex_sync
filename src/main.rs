@@ -42,20 +42,54 @@ pub async fn main() {
     let src_store = make_store(&config.source_url).expect("Failed to create source store");
     let dst_store =
         make_store(&config.destination_url).expect("Failed to create destination store");
-    
-    // Restore state, enumerate all jobs, dispatch and wait for them all
+
+    // Create a state file path in the current directory
+    let state_file = std::path::PathBuf::from(".vortex_sync_state.json");
+
+    // Create a lister with the source store
+    let mut lister = lister::Lister::new(
+        src_store.clone(),
+        None, // No prefix, list all files
+        state_file,
+    )
+    .await
+    .expect("Failed to create lister");
+
+    log::info!(
+        "Processing {} files ({} already processed, {} remaining)",
+        lister.total_files(),
+        lister.processed_files(),
+        lister.remaining_files()
+    );
+
+    // Process files one by one
+    while let Some(file_path) = lister.next_file() {
+        log::info!("Processing file: {}", file_path);
+
+        // Generate destination path by replacing .parquet with .vortex
+        let dest_path = file_path.replace(".parquet", ".vortex");
+
+        // Process the file
+        match rewrite::rewrite_parquet_to_vortex(
+            src_store.clone(),
+            &file_path,
+            dst_store.clone(),
+            &dest_path,
+        )
+        .await
+        {
+            Ok(_) => {
+                log::info!("Successfully processed file: {}", file_path);
+            }
+            Err(e) => {
+                log::error!("Failed to process file {}: {}", file_path, e);
+            }
+        }
+    }
+
+    log::info!("All files processed. Exiting.");
 }
 
-struct Lister {
-    store: Arc<dyn ObjectStore>,
-    prefix: Option<Path>,
-    state: ListerState,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-struct ListerState {
-    last_completed: Option<String>,
-}
 
 // Make an object store from the provided URL.
 fn make_store(url: &Url) -> Result<Arc<dyn ObjectStore>> {
