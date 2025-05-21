@@ -7,8 +7,14 @@ edition = "2024"
 anyhow = "1.0"
 arrow-array = "*"
 envy = "0.4"
-object_store = { version= "0.12.1", features = ["aws", "azure", "serde"] }
+futures-util = "0.3.31"
+log = "0.4"
+object_store = { version = "0.12.1", features = ["aws", "azure", "serde"] }
+parquet = { version = "*", features = ["tokio", "arrow", "async", "object_store"] }
 serde = "1.0"
-tokio = { version = "1.45", features = ["full"] }
+serde_json = "1.0"
+simplelog = "0.12"
+tokio = { version = "1.45", features = ["full", "sync"] }
 url = { version = "2.5", features = ["serde"] }
-vortex = { version = "0.34.0", features = ["tokio", "object_store", "parquet"] }
+vortex = { version = "0.34.0", features = ["tokio", "object_store", "parquet", "files"] }
+vortex-io = { version = "0.34.0", features = ["object_store", "tokio"]}

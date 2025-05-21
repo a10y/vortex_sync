@@ -1,5 +1,4 @@
 # vortex_sync
 
-Sync a file tree from a source to a target object store.
-
-Encountered Parquet files will be rewritten as Vortex files.
+Sync a source file tree with Parquet files to a destination tree with all of the
+Parquet files rewritten in Vortex.
