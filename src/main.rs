@@ -15,6 +15,8 @@ use object_store::aws::AmazonS3Builder;
 use object_store::azure::MicrosoftAzureBuilder;
 use object_store::path::Path;
 use simplelog::{ColorChoice, ConfigBuilder, TermLogger, TerminalMode};
+use tokio::sync::{mpsc, Semaphore};
+use tokio::task::JoinSet;
 use vortex::dtype::arrow::FromArrowType;
 use vortex::iter::ArrayIteratorExt;
 use vortex::stream::ArrayStream;
@@ -26,6 +28,14 @@ struct Config {
     source_url: Url,
     /// URL to the destination node
     destination_url: Url,
+    /// Number of files to process in parallel
+    #[serde(default = "default_parallelism")]
+    parallelism: usize,
+}
+
+/// Default parallelism is 4 concurrent files
+fn default_parallelism() -> usize {
+    4
 }
 
 #[tokio::main]
@@ -56,35 +66,106 @@ pub async fn main() {
     .expect("Failed to create lister");
 
     log::info!(
-        "Processing {} files ({} already processed, {} remaining)",
+        "Processing {} files ({} already processed, {} remaining) with parallelism {}",
         lister.total_files(),
         lister.processed_files(),
-        lister.remaining_files()
+        lister.remaining_files(),
+        config.parallelism
     );
 
-    // Process files one by one
-    while let Some(file_path) = lister.next_file() {
-        log::info!("Processing file: {}", file_path);
+    // Create a channel for sending files to worker tasks
+    let (tx, mut rx) = mpsc::channel(config.parallelism * 2);
 
-        // Generate destination path by replacing .parquet with .vortex
-        let dest_path = file_path.replace(".parquet", ".vortex");
+    // Create a semaphore to limit concurrent tasks
+    let semaphore = Arc::new(Semaphore::new(config.parallelism));
 
-        // Process the file
-        match rewrite::rewrite_parquet_to_vortex(
-            src_store.clone(),
-            &file_path,
-            dst_store.clone(),
-            &dest_path,
-        )
-        .await
-        {
-            Ok(_) => {
-                log::info!("Successfully processed file: {}", file_path);
-            }
-            Err(e) => {
-                log::error!("Failed to process file {}: {}", file_path, e);
+    // Spawn a task to send files from the lister to the channel
+    let sender_task = tokio::spawn(async move {
+        while let Some(file_path) = lister.next_file() {
+            // Generate destination path by replacing .parquet with .vortex
+            let dest_path = file_path.replace(".parquet", ".vortex");
+
+            if tx.send((file_path, dest_path)).await.is_err() {
+                // Channel closed, receiver is gone
+                break;
             }
         }
+    });
+
+    // Create a JoinSet to track all worker tasks
+    let mut tasks = JoinSet::new();
+
+    // Process files in parallel
+    loop {
+        tokio::select! {
+            // Wait for a file to process
+            Some((file_path, dest_path)) = rx.recv() => {
+                // Clone the necessary resources for the task
+                let src_store = src_store.clone();
+                let dst_store = dst_store.clone();
+                let semaphore = semaphore.clone();
+
+                // Spawn a task to process the file
+                tasks.spawn(async move {
+                    // Acquire a permit from the semaphore
+                    let _permit = semaphore.acquire().await.unwrap();
+
+                    log::info!("Processing file: {}", file_path);
+
+                    // Process the file
+                    let result = rewrite::rewrite_parquet_to_vortex(
+                        src_store,
+                        &file_path,
+                        dst_store,
+                        &dest_path,
+                    ).await;
+
+                    match result {
+                        Ok(_) => {
+                            log::info!("Successfully processed file: {}", file_path);
+                        }
+                        Err(e) => {
+                            log::error!("Failed to process file {}: {}", file_path, e);
+                        }
+                    }
+
+                    // Return the file path for logging purposes
+                    file_path
+                });
+            }
+            // Wait for a task to complete
+            Some(result) = tasks.join_next() => {
+                match result {
+                    Ok(file_path) => {
+                        log::debug!("Task completed for file: {}", file_path);
+                    }
+                    Err(e) => {
+                        log::error!("Task panicked: {}", e);
+                    }
+                }
+            }
+            // Exit when both the channel is closed and all tasks are done
+            else => {
+                break;
+            }
+        }
+    }
+
+    // Wait for any remaining tasks to complete
+    while let Some(result) = tasks.join_next().await {
+        match result {
+            Ok(file_path) => {
+                log::debug!("Task completed for file: {}", file_path);
+            }
+            Err(e) => {
+                log::error!("Task panicked: {}", e);
+            }
+        }
+    }
+
+    // Wait for the sender task to complete
+    if let Err(e) = sender_task.await {
+        log::error!("Sender task panicked: {}", e);
     }
 
     log::info!("All files processed. Exiting.");
