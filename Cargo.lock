@@ -3068,7 +3068,6 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 [[package]]
 name = "vortex"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "vortex-alp",
  "vortex-array",
@@ -3098,7 +3097,6 @@ dependencies = [
 [[package]]
 name = "vortex-alp"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "itertools",
  "num-traits",
@@ -3116,7 +3114,6 @@ dependencies = [
 [[package]]
 name = "vortex-array"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arcref",
  "arrow-arith",
@@ -3158,7 +3155,6 @@ dependencies = [
 [[package]]
 name = "vortex-btrblocks"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-buffer",
  "getrandom 0.2.16",
@@ -3187,7 +3183,6 @@ dependencies = [
 [[package]]
 name = "vortex-buffer"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-buffer",
  "bytes",
@@ -3198,7 +3193,6 @@ dependencies = [
 [[package]]
 name = "vortex-bytebool"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-buffer",
  "num-traits",
@@ -3213,7 +3207,6 @@ dependencies = [
 [[package]]
 name = "vortex-datetime-parts"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "getrandom 0.2.16",
  "prost",
@@ -3228,7 +3221,6 @@ dependencies = [
 [[package]]
 name = "vortex-decimal-byte-parts"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "itertools",
  "num-traits",
@@ -3244,7 +3236,6 @@ dependencies = [
 [[package]]
 name = "vortex-dict"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-buffer",
  "num-traits",
@@ -3261,7 +3252,6 @@ dependencies = [
 [[package]]
 name = "vortex-dtype"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-schema",
  "flatbuffers",
@@ -3281,7 +3271,6 @@ dependencies = [
 [[package]]
 name = "vortex-error"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-schema",
  "flatbuffers",
@@ -3299,7 +3288,6 @@ dependencies = [
 [[package]]
 name = "vortex-expr"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "dyn-hash",
  "itertools",
@@ -3315,7 +3303,6 @@ dependencies = [
 [[package]]
 name = "vortex-fastlanes"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrayref",
  "arrow-buffer",
@@ -3335,7 +3322,6 @@ dependencies = [
 [[package]]
 name = "vortex-file"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arcref",
  "async-trait",
@@ -3381,7 +3367,6 @@ dependencies = [
 [[package]]
 name = "vortex-flatbuffers"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "flatbuffers",
  "vortex-buffer",
@@ -3390,7 +3375,6 @@ dependencies = [
 [[package]]
 name = "vortex-fsst"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "fsst-rs",
  "prost",
@@ -3405,7 +3389,6 @@ dependencies = [
 [[package]]
 name = "vortex-io"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "bytes",
  "cfg-if",
@@ -3425,7 +3408,6 @@ dependencies = [
 [[package]]
 name = "vortex-ipc"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "bytes",
  "flatbuffers",
@@ -3442,7 +3424,6 @@ dependencies = [
 [[package]]
 name = "vortex-layout"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arcref",
  "arrow-array",
@@ -3478,7 +3459,6 @@ dependencies = [
 [[package]]
 name = "vortex-mask"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-buffer",
  "itertools",
@@ -3488,7 +3468,6 @@ dependencies = [
 [[package]]
 name = "vortex-metrics"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "getrandom 0.3.3",
  "parking_lot",
@@ -3499,7 +3478,6 @@ dependencies = [
 [[package]]
 name = "vortex-proto"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "prost",
  "prost-types",
@@ -3508,7 +3486,6 @@ dependencies = [
 [[package]]
 name = "vortex-runend"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-buffer",
  "itertools",
@@ -3525,7 +3502,6 @@ dependencies = [
 [[package]]
 name = "vortex-scalar"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "arrow-array",
  "arrow-buffer",
@@ -3544,7 +3520,6 @@ dependencies = [
 [[package]]
 name = "vortex-sparse"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "itertools",
  "prost",
@@ -3560,7 +3535,6 @@ dependencies = [
 [[package]]
 name = "vortex-zigzag"
 version = "0.1.0"
-source = "git+https://github.com/vortex-data/vortex.git?rev=46cd33b7749a0ba7854353d911e68a0a047a2df1#46cd33b7749a0ba7854353d911e68a0a047a2df1"
 dependencies = [
  "vortex-array",
  "vortex-buffer",
