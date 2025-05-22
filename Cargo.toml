@@ -16,7 +16,7 @@ serde_json = "1.0"
 simplelog = "0.12"
 tokio = { version = "1.45", features = ["full", "sync"] }
 url = { version = "2.5", features = ["serde"] }
-vortex = { git = "https://github.com/vortex-data/vortex.git", rev = "df87a6ec52c1a6244e48265c21b82978dc47d5c8", features = ["tokio", "object_store", "parquet", "files"] }
-vortex-io = { git = "https://github.com/vortex-data/vortex.git", rev = "df87a6ec52c1a6244e48265c21b82978dc47d5c8", features = ["object_store", "tokio"]}
+vortex = { git = "https://github.com/vortex-data/vortex.git", rev = "8e2f35bd9925d02f60c4714bed6448b7a3837fb7", features = ["tokio", "object_store", "parquet", "files"] }
+vortex-io = { git = "https://github.com/vortex-data/vortex.git", rev = "8e2f35bd9925d02f60c4714bed6448b7a3837fb7", features = ["object_store", "tokio"]}
 #vortex = { path = "../vortex/vortex", features = ["tokio", "object_store", "parquet", "files"] }
 #vortex-io = { path = "../vortex/vortex-io", features = ["object_store", "tokio"] }
