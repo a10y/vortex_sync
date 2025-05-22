@@ -1,16 +1,17 @@
+use anyhow::Context;
 use futures_util::StreamExt;
-use object_store::path::Path;
 use object_store::ObjectStore;
-use parquet::arrow::async_reader::ParquetObjectReader;
+use object_store::path::Path;
 use parquet::arrow::ParquetRecordBatchStreamBuilder;
+use parquet::arrow::async_reader::ParquetObjectReader;
 use std::sync::Arc;
 use std::time::Instant;
-use vortex::dtype::arrow::FromArrowType;
+use vortex::TryIntoArray;
 use vortex::dtype::DType;
+use vortex::dtype::arrow::FromArrowType;
 use vortex::error::VortexError;
 use vortex::file::VortexWriteOptions;
-use vortex::stream::{ArrayStream, ArrayStreamAdapter};
-use vortex::TryIntoArray;
+use vortex::stream::ArrayStreamAdapter;
 use vortex_io::ObjectStoreWriter;
 
 pub async fn rewrite_parquet_to_vortex(
@@ -20,13 +21,19 @@ pub async fn rewrite_parquet_to_vortex(
     vortex_dest: &str,
 ) -> anyhow::Result<()> {
     // Read batches from the entire thing here.
-    let reader = ParquetObjectReader::new(src_store, Path::parse(parquet_source)?);
+    let src_path = Path::parse(parquet_source)?;
+    let object_meta = src_store.head(&src_path).await?;
+    let reader = ParquetObjectReader::new(src_store, src_path).with_file_size(object_meta.size);
     let parquet = ParquetRecordBatchStreamBuilder::new(reader)
-        .await?
-        .build()?;
+        .await
+        .context("new stream builder")?
+        .build()
+        .context("ParquetRecordBatchStreamBuilder::build")?;
 
     let writer = ObjectStoreWriter::new(dst_store, Path::parse(vortex_dest)?).await?;
     let dtype = DType::from_arrow(parquet.schema().as_ref());
+    log::info!("arrow schema: {}", parquet.schema());
+    log::info!("vortex schema: {dtype}");
     let vortex_stream = parquet
         .map(|record_batch| {
             record_batch

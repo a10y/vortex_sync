@@ -1,11 +1,10 @@
 //! Stateful file lister using a JSON file.
 
 use anyhow::Result;
-use futures_util::stream::BoxStream;
 use futures_util::StreamExt;
 use log::{info, warn};
+use object_store::ObjectStore;
 use object_store::path::Path;
-use object_store::{ObjectStore, ObjectMeta};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
@@ -31,14 +30,21 @@ pub struct ListerState {
 
 impl Lister {
     /// Create a new lister with the given object store and optional prefix.
-    pub async fn new(store: Arc<dyn ObjectStore>, prefix: Option<Path>, state_file: PathBuf) -> Result<Self> {
+    pub async fn new(
+        store: Arc<dyn ObjectStore>,
+        prefix: Option<Path>,
+        state_file: PathBuf,
+    ) -> Result<Self> {
         // Try to load existing state
         let state = if state_file.exists() {
             info!("Found state file at {:?}, loading state", state_file);
             let state_json = fs::read_to_string(&state_file)?;
             serde_json::from_str(&state_json)?
         } else {
-            info!("No state file found at {:?}, initializing new state", state_file);
+            info!(
+                "No state file found at {:?}, initializing new state",
+                state_file
+            );
             ListerState::default()
         };
 
